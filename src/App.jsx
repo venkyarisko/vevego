@@ -195,14 +195,15 @@ const PaySplit = ({ setActivePage }) => {
         ← Back
       </button>
 
-      {/* Konten Utama - Dibuat sangat rapat agar fit satu layar */}
+      {/* Konten Utama - Responsive scale untuk Desktop vs Mobile */}
       <div style={{ 
         display: 'flex', 
         flexDirection: 'column', 
         alignItems: 'center', 
         width: '100%',
-        maxWidth: '500px',
-        gap: '0.85rem' // Sedikit lebih longgar tapi tetap rapat
+        maxWidth: '800px', // Lebih lebar di desktop
+        gap: 'clamp(0.75rem, 2vh, 1.5rem)',
+        padding: '1rem'
       }}>
         <div style={{ textAlign: 'center' }}>
           <motion.div 
@@ -213,7 +214,7 @@ const PaySplit = ({ setActivePage }) => {
               background: 'var(--accent-color)', 
               color: 'white', 
               marginBottom: '0.5rem',
-              fontSize: '0.75rem',
+              fontSize: 'clamp(0.7rem, 1.5vw, 0.9rem)',
               padding: '0.25rem 0.75rem'
             }}
           >
@@ -223,17 +224,17 @@ const PaySplit = ({ setActivePage }) => {
           <motion.h2 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            style={{ fontSize: '1.8rem', marginBottom: '0.25rem' }}
+            style={{ fontSize: 'clamp(1.5rem, 5vw, 2.8rem)', marginBottom: '0.25rem' }}
           >
             PaySplit QR
           </motion.h2>
 
-          <p style={{ fontSize: '0.9rem', color: 'var(--text-color)', fontWeight: 500, margin: 0 }}>
+          <p style={{ fontSize: 'clamp(0.85rem, 2vw, 1.1rem)', color: 'var(--text-color)', fontWeight: 500, margin: 0 }}>
             Capek hitung manual? <span style={{ color: 'var(--accent-color)' }}>Pakai PaySplit QR!</span>
           </p>
         </div>
 
-        {/* Grid Fitur - 2 kolom */}
+        {/* Grid Fitur - Tetap 2 kolom tapi ukuran adaptif */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -241,7 +242,7 @@ const PaySplit = ({ setActivePage }) => {
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: '0.6rem',
+            gap: 'clamp(0.5rem, 1.5vw, 1rem)',
             width: '100%',
             padding: '0.25rem'
           }}
@@ -252,7 +253,7 @@ const PaySplit = ({ setActivePage }) => {
               variants={itemVariants}
               whileHover={{ scale: 1.03 }}
               style={{
-                padding: '0.75rem',
+                padding: 'clamp(0.6rem, 2vw, 1.2rem)',
                 background: 'var(--card-bg)',
                 border: '1px solid var(--border-color)',
                 borderRadius: '0.75rem',
@@ -262,16 +263,16 @@ const PaySplit = ({ setActivePage }) => {
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <span style={{ fontSize: '0.8rem' }}>✅</span>
-                <strong style={{ fontSize: '0.85rem', whiteSpace: 'nowrap' }}>{f.title}</strong>
+                <span style={{ fontSize: 'clamp(0.75rem, 1.5vw, 1rem)' }}>✅</span>
+                <strong style={{ fontSize: 'clamp(0.8rem, 1.8vw, 1.1rem)', whiteSpace: 'nowrap' }}>{f.title}</strong>
               </div>
-              <p style={{ fontSize: '0.75rem', margin: 0, color: 'var(--text-muted)', lineHeight: '1.3' }}>{f.desc}</p>
+              <p style={{ fontSize: 'clamp(0.7rem, 1.5vw, 0.9rem)', margin: 0, color: 'var(--text-muted)', lineHeight: '1.4' }}>{f.desc}</p>
             </motion.div>
           ))}
         </motion.div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
-          <p style={{ fontSize: '0.85rem', fontStyle: 'italic', margin: 0, opacity: 0.8 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(0.75rem, 2vh, 1.2rem)' }}>
+          <p style={{ fontSize: 'clamp(0.8rem, 1.5vw, 1rem)', fontStyle: 'italic', margin: 0, opacity: 0.8 }}>
             Hitung, Bagi, Bayar! 🚀
           </p>
 
@@ -283,21 +284,21 @@ const PaySplit = ({ setActivePage }) => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               style={{
-                padding: '0.7rem 1.8rem',
+                padding: 'clamp(0.6rem, 1.5vw, 0.8rem) clamp(1.5rem, 3vw, 2.5rem)',
                 borderRadius: '9999px',
                 background: 'var(--accent-color)',
                 color: 'white',
                 border: 'none',
                 cursor: 'pointer',
                 fontWeight: 700,
-                fontSize: '1rem',
+                fontSize: 'clamp(0.9rem, 1.8vw, 1.2rem)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
                 boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
               }}
             >
-              <Download size={18} /> Download
+              <Download size={20} /> Download
             </motion.button>
           </a>
         </div>
