@@ -403,6 +403,120 @@ const About = () => {
   )
 }
 
+const Visualizer = ({ audioRef, isPlaying }) => {
+  const canvasRef = useRef(null)
+  const analyserRef = useRef(null)
+  const animationRef = useRef(null)
+
+  useEffect(() => {
+    if (!audioRef.current) return
+
+    const initAudio = () => {
+      // Prevent multiple initializations
+      if (analyserRef.current && window.audioCtx && window.audioCtx.state === 'running') return
+
+      try {
+        if (!window.audioCtx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext
+          window.audioCtx = new AudioContext()
+        }
+
+        if (window.audioCtx.state === 'suspended') {
+          window.audioCtx.resume()
+        }
+
+        if (!window.audioSource) {
+          window.audioSource = window.audioCtx.createMediaElementSource(audioRef.current)
+        }
+
+        if (!analyserRef.current) {
+          const analyser = window.audioCtx.createAnalyser()
+          window.audioSource.connect(analyser)
+          analyser.connect(window.audioCtx.destination)
+          analyser.fftSize = 128
+          analyserRef.current = analyser
+        }
+      } catch (err) {
+        console.error("Visualizer error:", err)
+      }
+    }
+
+    if (isPlaying && window.audioCtx && window.audioCtx.state === 'running') {
+      initAudio()
+    }
+
+    window.addEventListener('click', initAudio)
+    window.addEventListener('touchstart', initAudio)
+    return () => {
+      window.removeEventListener('click', initAudio)
+      window.removeEventListener('touchstart', initAudio)
+    }
+  }, [audioRef, isPlaying])
+
+  useEffect(() => {
+    if (!canvasRef.current) return
+
+    const canvas = canvasRef.current
+    const ctx = canvas.getContext('2d')
+
+    const draw = () => {
+      animationRef.current = requestAnimationFrame(draw)
+
+      if (!analyserRef.current) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        return
+      }
+
+      const bufferLength = analyserRef.current.frequencyBinCount
+      const dataArray = new Uint8Array(bufferLength)
+      analyserRef.current.getByteFrequencyData(dataArray)
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      const barWidth = (canvas.width / bufferLength)
+      let barHeight;
+
+      // Mirror the bars to be tall in the middle
+      for (let i = 0; i < bufferLength; i++) {
+        // Calculate distance from center to pick the frequency bin
+        // Higher frequencies at edges, lower (more active) frequencies in middle
+        const center = bufferLength / 2
+        const distFromCenter = Math.abs(i - center)
+        const dataIndex = Math.floor(distFromCenter)
+
+        barHeight = (dataArray[dataIndex] / 255) * canvas.height
+
+        // Focus height in the middle by tapering edges
+        const weight = Math.pow(1 - (distFromCenter / center), 1.5)
+        barHeight *= weight
+
+        const opacity = (dataArray[dataIndex] / 255) * 0.8 + 0.2
+        ctx.fillStyle = `rgba(59, 130, 246, ${opacity})`
+
+        const radius = 2
+        const x = i * barWidth
+        ctx.beginPath()
+        if (ctx.roundRect) {
+          ctx.roundRect(x, canvas.height - barHeight, barWidth - 1, barHeight, [radius, radius, 0, 0])
+        } else {
+          ctx.rect(x, canvas.height - barHeight, barWidth - 1, barHeight)
+        }
+        ctx.fill()
+      }
+    }
+
+    draw()
+    return () => cancelAnimationFrame(animationRef.current)
+  }, [])
+
+  return (
+    <div className="visualizer-container">
+      <canvas ref={canvasRef} width={300} height={60} className="visualizer-canvas" />
+    </div>
+  )
+}
+
+
 
 // --- Main App ---
 
@@ -469,13 +583,21 @@ function App() {
     if (audioRef.current) {
       audioRef.current.volume = volume
       if (isPlaying) {
-        audioRef.current.play().catch(() => {
-          const startAudio = () => {
-            audioRef.current.play()
-            window.removeEventListener('click', startAudio)
-          }
-          window.addEventListener('click', startAudio)
-        })
+        const playPromise = audioRef.current.play()
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            // Autoplay was prevented, wait for interaction
+            const startAudio = () => {
+              if (isPlaying && audioRef.current) {
+                audioRef.current.play().catch(e => console.error("Final play attempt failed:", e))
+              }
+              window.removeEventListener('click', startAudio)
+              window.removeEventListener('touchstart', startAudio)
+            }
+            window.addEventListener('click', startAudio)
+            window.addEventListener('touchstart', startAudio)
+          })
+        }
       } else {
         audioRef.current.pause()
       }
@@ -490,7 +612,30 @@ function App() {
     setIsPlaying(!isPlaying)
   }
 
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
+
+  // Helper to format time
+  const formatTime = (time) => {
+    if (isNaN(time)) return '0:00'
+    const minutes = Math.floor(time / 60)
+    const seconds = Math.floor(time % 60)
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`
+  }
+
   const currentSong = playlist.length > 0 ? songs[playlist[currentIndex]] : songs[0]
+  const [showTitle, setShowTitle] = useState(false)
+
+  // Auto-hide title logic
+  useEffect(() => {
+    if (currentSong && currentSong.title) {
+      setShowTitle(true)
+      const timer = setTimeout(() => {
+        setShowTitle(false)
+      }, 10000)
+      return () => clearTimeout(timer)
+    }
+  }, [currentSong.title])
 
   return (
     <div className="app-container">
@@ -499,6 +644,8 @@ function App() {
         ref={audioRef}
         src={currentSong.src}
         onEnded={handleSongEnd}
+        onTimeUpdate={(e) => setCurrentTime(e.target.currentTime)}
+        onLoadedMetadata={(e) => setDuration(e.target.duration)}
         autoPlay
       />
 
@@ -514,24 +661,51 @@ function App() {
           border: '1px solid var(--border-color)',
           boxShadow: '0 2px 12px rgba(0,0,0,0.08)'
         }}>
-          {/* Song Title */}
-          <motion.div
-            key={currentSong.title}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            style={{
-              fontSize: '0.7rem',
-              fontWeight: 700,
-              color: 'var(--accent-color)',
-              letterSpacing: '0.5px',
-              whiteSpace: 'nowrap',
-              borderRight: '1px solid var(--border-color)',
-              paddingRight: '0.75rem',
-              marginRight: '0.25rem'
-            }}
-          >
-            {currentSong.title}
-          </motion.div>
+          {/* Info Overlay (Title or Timestamp) */}
+          <AnimatePresence mode="wait">
+            {showTitle ? (
+              <motion.div
+                key="title"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 10 }}
+                transition={{ duration: 0.3 }}
+                style={{
+                  fontSize: '0.7rem',
+                  fontWeight: 700,
+                  color: 'var(--accent-color)',
+                  letterSpacing: '0.5px',
+                  whiteSpace: 'nowrap',
+                  borderRight: '1px solid var(--border-color)',
+                  paddingRight: '0.75rem',
+                  marginRight: '0.25rem'
+                }}
+              >
+                {currentSong.title}
+              </motion.div>
+            ) : (
+              <motion.div
+                key="timestamp"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 10 }}
+                transition={{ duration: 0.3 }}
+                style={{
+                  fontSize: '0.7rem',
+                  fontWeight: 700,
+                  color: 'var(--text-muted)',
+                  letterSpacing: '0.5px',
+                  whiteSpace: 'nowrap',
+                  borderRight: '1px solid var(--border-color)',
+                  paddingRight: '0.75rem',
+                  marginRight: '0.25rem',
+                  fontFamily: 'monospace'
+                }}
+              >
+                {formatTime(currentTime)} / {formatTime(duration)}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <button
             onClick={toggleMusic}
@@ -575,6 +749,7 @@ function App() {
       </main>
 
       <Navbar activePage={activePage} setActivePage={setActivePage} />
+      <Visualizer audioRef={audioRef} isPlaying={isPlaying} />
     </div>
   )
 }
