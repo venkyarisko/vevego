@@ -49,11 +49,11 @@ const Home = () => (
   </motion.div>
 )
 
-const Work = ({ setActivePage }) => {
+const Work = ({ setActivePage, theme }) => {
   const projects = [
     {
       title: 'YouTube Profile',
-      desc: 'Fan funding platform for support and interactive overlays.',
+      desc: 'Fan funding for support and interactive overlays.',
       link: 'https://venky-arisko.vercel.app/',
       icon: <FaYoutube size={24} />,
       isExternal: true
@@ -67,7 +67,7 @@ const Work = ({ setActivePage }) => {
     },
     {
       title: 'PaySplitQR',
-      desc: 'Simplified bill splitting app with QR integration.',
+      desc: 'Android App (APK) for smart bill splitting.',
       link: 'paysplit',
       icon: <ExternalLink />,
       isExternal: false
@@ -85,21 +85,37 @@ const Work = ({ setActivePage }) => {
         p.isExternal ? (
           <a key={i} href={p.link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
             <div className="card">
-              <div style={{ marginBottom: '1rem', color: 'var(--accent-color)' }}>{p.icon}</div>
-              <h3>{p.title}</h3>
-              <p>{p.desc}</p>
-              <div style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', fontSize: '0.8rem', color: 'var(--accent-color)', fontWeight: 600 }}>
-                View Project <ExternalLink size={12} style={{ marginLeft: '4px' }} />
+              <div className="card-icon" style={{ marginBottom: '1rem', color: 'var(--accent-color)' }}>{p.icon}</div>
+              <div className="card-content">
+                <motion.h3
+                  animate={{ color: theme === 'light' ? '#1a1a1a' : '#f0f0f0' }}
+                  transition={{ duration: 0.3 }}
+                  style={{ marginBottom: '0.75rem', fontSize: '1.25rem' }}
+                >
+                  {p.title}
+                </motion.h3>
+                <p>{p.desc}</p>
+                <div className="card-action" style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', fontSize: '0.8rem', color: 'var(--accent-color)', fontWeight: 600 }}>
+                  View Project <ExternalLink size={12} style={{ marginLeft: '4px' }} />
+                </div>
               </div>
             </div>
           </a>
         ) : (
           <div key={i} className="card" onClick={() => setActivePage(p.link)}>
-            <div style={{ marginBottom: '1rem', color: 'var(--accent-color)' }}>{p.icon}</div>
-            <h3>{p.title}</h3>
-            <p>{p.desc}</p>
-            <div style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', fontSize: '0.8rem', color: 'var(--accent-color)', fontWeight: 600 }}>
-              Learn More <ExternalLink size={12} style={{ marginLeft: '4px' }} />
+            <div className="card-icon" style={{ marginBottom: '1rem', color: 'var(--accent-color)' }}>{p.icon}</div>
+            <div className="card-content">
+              <motion.h3
+                animate={{ color: theme === 'light' ? '#1a1a1a' : '#f0f0f0' }}
+                transition={{ duration: 0.3 }}
+                style={{ marginBottom: '0.75rem', fontSize: '1.25rem' }}
+              >
+                {p.title}
+              </motion.h3>
+              <p>{p.desc}</p>
+              <div className="card-action" style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', fontSize: '0.8rem', color: 'var(--accent-color)', fontWeight: 600 }}>
+                Learn More <ExternalLink size={12} style={{ marginLeft: '4px' }} />
+              </div>
             </div>
           </div>
         )
@@ -295,15 +311,15 @@ const About = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      style={{ 
-        maxWidth: '700px', 
+      style={{
+        maxWidth: '700px',
         width: '100%',
         height: '500px', // Mengunci tinggi total agar posisi tidak bergeser
-        display: 'flex', 
-        flexDirection: 'column', 
-        alignItems: 'center', 
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         justifyContent: 'flex-start', // Mulai dari atas
-        padding: '0 1rem' 
+        padding: '0 1rem'
       }}
     >
       {/* Lang Switcher */}
@@ -358,10 +374,10 @@ const About = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
-          style={{ 
-            textAlign: 'center', 
+          style={{
+            textAlign: 'center',
             minHeight: '180px', // Menjaga posisi tab tetap stabil
-            display: 'flex', 
+            display: 'flex',
             alignItems: 'flex-start', // Mulai dari atas agar konsisten
             justifyContent: 'center',
             padding: '0 1rem',
@@ -395,7 +411,10 @@ function App() {
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('venky-theme') || 'light'
   })
-  const [isPlaying, setIsPlaying] = useState(true)
+  const [isPlaying, setIsPlaying] = useState(() => {
+    const saved = localStorage.getItem('venky-music')
+    return saved === null ? true : saved === 'true'
+  })
   const [volume, setVolume] = useState(0.2)
   const audioRef = useRef(null)
 
@@ -405,12 +424,20 @@ function App() {
   }, [theme])
 
   useEffect(() => {
+    localStorage.setItem('venky-music', isPlaying)
     if (audioRef.current) {
       audioRef.current.volume = volume
       if (isPlaying) {
         audioRef.current.play().catch(() => {
-          console.log("Autoplay blocked. Music will start on user interaction.");
-        });
+          // Jika diblokir browser, tunggu klik pertama dari user
+          const startAudio = () => {
+            audioRef.current.play()
+            window.removeEventListener('click', startAudio)
+          }
+          window.addEventListener('click', startAudio)
+        })
+      } else {
+        audioRef.current.pause()
       }
     }
   }, [volume, isPlaying])
@@ -420,60 +447,70 @@ function App() {
   }
 
   const toggleMusic = () => {
-    if (isPlaying) {
-      audioRef.current.pause()
-    } else {
-      audioRef.current.play()
-    }
     setIsPlaying(!isPlaying)
   }
 
   return (
     <div className="app-container">
       {/* Hidden Audio Element - Chill LoFi */}
-      <audio 
+      <audio
         ref={audioRef}
-        src="/vevego/song/1.mp3" 
+        src="/vevego/song/1.mp3"
         loop
         autoPlay
       />
 
       <div style={{ position: 'fixed', top: '1.5rem', right: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem', zIndex: 101 }}>
-        {/* Volume Control Pill */}
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '0.5rem', 
-          background: 'var(--card-bg)', 
-          padding: '0.4rem 0.8rem', 
+        {/* Music Control Pill */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.75rem',
+          background: 'var(--card-bg)',
+          padding: '0.4rem 1rem',
           borderRadius: '999px',
           border: '1px solid var(--border-color)',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+          boxShadow: '0 2px 12px rgba(0,0,0,0.08)'
         }}>
-          <button 
+          {/* Song Title */}
+          <div style={{
+            fontSize: '0.7rem',
+            fontWeight: 700,
+            color: 'var(--accent-color)',
+            letterSpacing: '0.5px',
+            whiteSpace: 'nowrap',
+            borderRight: '1px solid var(--border-color)',
+            paddingRight: '0.75rem',
+            marginRight: '0.25rem'
+          }}>
+            Lo-Fi : I Need a Girl
+          </div>
+
+          <button
             onClick={toggleMusic}
             style={{ background: 'none', border: 'none', color: 'var(--text-color)', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}
           >
-            {isPlaying && volume > 0 ? <Volume2 size={20} /> : <VolumeX size={20} />}
+            {isPlaying && volume > 0 ? <Volume2 size={18} /> : <VolumeX size={18} />}
           </button>
-          
-          <input 
-            type="range" 
-            min="0" 
-            max="1" 
-            step="0.01" 
-            value={volume} 
+
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={volume}
             onChange={(e) => setVolume(parseFloat(e.target.value))}
-            style={{ 
-              width: '60px', 
+            style={{
+              width: '50px',
               cursor: 'pointer',
-              accentColor: 'var(--accent-color)'
+              accentColor: 'var(--accent-color)',
+              height: '4px'
             }}
           />
         </div>
 
-        <button 
-          className="theme-toggle" 
+        <button
+          className="theme-toggle"
           onClick={toggleTheme}
           style={{ position: 'static', padding: '0.5rem' }}
         >
@@ -484,7 +521,7 @@ function App() {
       <main className="content-area">
         <AnimatePresence mode="wait">
           {activePage === 'home' && <Home key="home" />}
-          {activePage === 'work' && <Work key="work" setActivePage={setActivePage} />}
+          {activePage === 'work' && <Work key="work" setActivePage={setActivePage} theme={theme} />}
           {activePage === 'paysplit' && <PaySplit key="paysplit" setActivePage={setActivePage} />}
           {activePage === 'about' && <About key="about" />}
         </AnimatePresence>

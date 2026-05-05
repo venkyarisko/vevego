@@ -106,7 +106,8 @@ body {
 
 @media (max-width: 767px) {
   .content-area {
-    padding-bottom: 8rem; /* Memberikan ruang agar tidak tertutup navbar bawah */
+    padding-bottom: 8rem;
+    /* Memberikan ruang agar tidak tertutup navbar bawah */
   }
 }
 
@@ -187,23 +188,60 @@ p {
   padding: 2rem;
   border-radius: 1.25rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
   cursor: pointer;
 }
 
 @media (max-width: 767px) {
+  .cards-grid {
+    gap: 0.75rem;
+    padding: 0 1rem;
+  }
+  
   .card {
-    padding: 1.25rem; /* Lebih ringkas di mobile */
-    border-radius: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.85rem 1rem;
+    gap: 1rem;
+    border-radius: 0.85rem;
+    text-align: left;
   }
-  
+
+  .card .card-icon {
+    margin-bottom: 0 !important;
+    padding: 0.5rem !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 42px;
+    height: 42px;
+  }
+
+  .card .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex: 1;
+  }
+
   .card h3 {
-    font-size: 1.1rem;
-    margin-bottom: 0.4rem;
+    font-size: 1rem !important;
+    margin-bottom: 0 !important;
   }
-  
+
   .card p {
-    font-size: 0.85rem;
+    font-size: 0.75rem !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    opacity: 0.7;
+  }
+
+  .card .card-action {
+    display: none !important; /* Sembunyikan 'Learn More' teks di mobile untuk hemat ruang */
   }
 }
 
@@ -220,8 +258,10 @@ p {
 
 /* Hide scrollbar for IE, Edge and Firefox */
 * {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .card h3 {
