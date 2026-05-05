@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sun, Moon, ExternalLink, User, Briefcase, Home as HomeIcon, Video, Globe, Download } from 'lucide-react'
+import { Sun, Moon, ExternalLink, User, Briefcase, Home as HomeIcon, Video, Globe, Download, Volume2, VolumeX } from 'lucide-react'
 import { FaGithub, FaInstagram, FaYoutube, FaTiktok, FaDiscord } from 'react-icons/fa'
 
 // --- Components ---
@@ -395,21 +395,91 @@ function App() {
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('venky-theme') || 'light'
   })
+  const [isPlaying, setIsPlaying] = useState(true)
+  const [volume, setVolume] = useState(0.2)
+  const audioRef = useRef(null)
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
     localStorage.setItem('venky-theme', theme)
   }, [theme])
 
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume
+      if (isPlaying) {
+        audioRef.current.play().catch(() => {
+          console.log("Autoplay blocked. Music will start on user interaction.");
+        });
+      }
+    }
+  }, [volume, isPlaying])
+
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light')
   }
 
+  const toggleMusic = () => {
+    if (isPlaying) {
+      audioRef.current.pause()
+    } else {
+      audioRef.current.play()
+    }
+    setIsPlaying(!isPlaying)
+  }
+
   return (
     <div className="app-container">
-      <button className="theme-toggle" onClick={toggleTheme}>
-        {theme === 'light' ? <Moon size={24} /> : <Sun size={24} />}
-      </button>
+      {/* Hidden Audio Element - Chill LoFi */}
+      <audio 
+        ref={audioRef}
+        src="/vevego/song/1.mp3" 
+        loop
+        autoPlay
+      />
+
+      <div style={{ position: 'fixed', top: '1.5rem', right: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem', zIndex: 101 }}>
+        {/* Volume Control Pill */}
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '0.5rem', 
+          background: 'var(--card-bg)', 
+          padding: '0.4rem 0.8rem', 
+          borderRadius: '999px',
+          border: '1px solid var(--border-color)',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+        }}>
+          <button 
+            onClick={toggleMusic}
+            style={{ background: 'none', border: 'none', color: 'var(--text-color)', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}
+          >
+            {isPlaying && volume > 0 ? <Volume2 size={20} /> : <VolumeX size={20} />}
+          </button>
+          
+          <input 
+            type="range" 
+            min="0" 
+            max="1" 
+            step="0.01" 
+            value={volume} 
+            onChange={(e) => setVolume(parseFloat(e.target.value))}
+            style={{ 
+              width: '60px', 
+              cursor: 'pointer',
+              accentColor: 'var(--accent-color)'
+            }}
+          />
+        </div>
+
+        <button 
+          className="theme-toggle" 
+          onClick={toggleTheme}
+          style={{ position: 'static', padding: '0.5rem' }}
+        >
+          {theme === 'light' ? <Moon size={24} /> : <Sun size={24} />}
+        </button>
+      </div>
 
       <main className="content-area">
         <AnimatePresence mode="wait">

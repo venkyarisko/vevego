@@ -1,16 +1,65 @@
-# React + Vite
+# Venky Arisko | All in You Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A premium, minimalist, and dynamic portfolio website built with React, Vite, and Framer Motion. This site serves as a central hub for all digital projects, streaming activities, and professional services.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Single-View Aesthetic**: A modern "no-scroll" design for a clean and focused user experience.
+- **Dynamic Projects Showcase**: Features an infinite marquee for project highlights (PaySplit QR).
+- **Responsive "About Me"**: Tabbed interface with automatic age and career duration calculations.
+- **Bilingual Support**: Toggle between Indonesian and English seamlessly.
+- **Dark/Light Mode**: Persistent theme settings saved to browser local storage.
+- **Background Music**: Integrated Lo-Fi background music with volume control for an immersive experience.
+- **Modern Tech Stack**: Built with React 19, Vite, Framer Motion, and Lucide Icons.
 
-## React Compiler
+## 🛠️ Technology Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend**: React.js
+- **Styling**: Vanilla CSS (Custom Design System)
+- **Animations**: Framer Motion
+- **Icons**: Lucide React & React Icons
+- **Build Tool**: Vite
 
-## Expanding the ESLint configuration
+## 🚀 Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Prerequisites
+- Node.js (v18 or higher)
+- npm or yarn
+
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/venkyarisko/vevego.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd vevego
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+### Running Locally
+```bash
+npm run dev
+```
+
+### Deployment
+The project is configured for easy deployment to GitHub Pages:
+```bash
+npm run deploy
+```
+
+## 📁 Project Structure
+- `src/App.jsx`: Main application logic and components.
+- `src/index.css`: Global styles and design system.
+- `public/`: Static assets (icons, music, etc.).
+
+## 👤 Author
+**Venky Arisko**
+- YouTube: [Venky Arisko](https://youtube.com/@venkyarisko)
+- Instagram: [@venkyarisko](https://instagram.com/venkyarisko)
+
+---
+Made with ❤️ by Antigravity AI for Venky Arisko.
