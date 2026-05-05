@@ -1,0 +1,429 @@
+import React, { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Sun, Moon, ExternalLink, User, Briefcase, Home as HomeIcon, Video, Globe, Download } from 'lucide-react'
+import { FaGithub, FaInstagram, FaYoutube, FaTiktok, FaDiscord } from 'react-icons/fa'
+
+// --- Components ---
+
+const Navbar = ({ activePage, setActivePage }) => {
+  const navItems = [
+    { id: 'home', label: 'Home', icon: HomeIcon },
+    { id: 'work', label: 'Work', icon: Briefcase },
+    { id: 'about', label: 'About', icon: User },
+  ]
+
+  return (
+    <nav className="navbar">
+      {navItems.map((item) => (
+        <a
+          key={item.id}
+          className={`nav-link ${activePage === item.id ? 'active' : ''}`}
+          onClick={() => setActivePage(item.id)}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+  )
+}
+
+const Home = () => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -20 }}
+    className="text-center"
+  >
+    <div className="badge">
+      <span style={{ width: '8px', height: '8px', backgroundColor: '#22c55e', borderRadius: '50%', marginRight: '8px', display: 'inline-block' }}></span>
+      Available for Work
+    </div>
+    <h1>Venky Arisko<br />All in You.</h1>
+    <p>Creator, Developer & Digital Enthusiast</p>
+    <div className="social-links" style={{ justifyContent: 'center' }}>
+      <a href="https://www.instagram.com/venkyarisko/" target="_blank" rel="noopener noreferrer" className="social-icon" title="Instagram"><FaInstagram size={20} /></a>
+      <a href="https://www.tiktok.com/@truevevego" target="_blank" rel="noopener noreferrer" className="social-icon" title="TikTok"><FaTiktok size={20} /></a>
+      <a href="https://www.youtube.com/@vevego" target="_blank" rel="noopener noreferrer" className="social-icon" title="YouTube"><FaYoutube size={20} /></a>
+      <a href="https://discord.com/users/vevego" target="_blank" rel="noopener noreferrer" className="social-icon" title="Discord: vevego"><FaDiscord size={20} /></a>
+    </div>
+  </motion.div>
+)
+
+const Work = ({ setActivePage }) => {
+  const projects = [
+    {
+      title: 'YouTube Profile',
+      desc: 'Fan funding platform for support and interactive overlays.',
+      link: 'https://venky-arisko.vercel.app/',
+      icon: <FaYoutube size={24} />,
+      isExternal: true
+    },
+    {
+      title: 'Joki/Veve Service',
+      desc: 'Professional gaming services and account boosting.',
+      link: 'https://venkyarisko.github.io/joki-veve/',
+      icon: <Briefcase />,
+      isExternal: true
+    },
+    {
+      title: 'PaySplitQR',
+      desc: 'Simplified bill splitting app with QR integration.',
+      link: 'paysplit',
+      icon: <ExternalLink />,
+      isExternal: false
+    }
+  ]
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 1.05 }}
+      className="cards-grid"
+    >
+      {projects.map((p, i) => (
+        p.isExternal ? (
+          <a key={i} href={p.link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <div className="card">
+              <div style={{ marginBottom: '1rem', color: 'var(--accent-color)' }}>{p.icon}</div>
+              <h3>{p.title}</h3>
+              <p>{p.desc}</p>
+              <div style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', fontSize: '0.8rem', color: 'var(--accent-color)', fontWeight: 600 }}>
+                View Project <ExternalLink size={12} style={{ marginLeft: '4px' }} />
+              </div>
+            </div>
+          </a>
+        ) : (
+          <div key={i} className="card" onClick={() => setActivePage(p.link)}>
+            <div style={{ marginBottom: '1rem', color: 'var(--accent-color)' }}>{p.icon}</div>
+            <h3>{p.title}</h3>
+            <p>{p.desc}</p>
+            <div style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', fontSize: '0.8rem', color: 'var(--accent-color)', fontWeight: 600 }}>
+              Learn More <ExternalLink size={12} style={{ marginLeft: '4px' }} />
+            </div>
+          </div>
+        )
+      ))}
+    </motion.div>
+  )
+}
+
+const PaySplit = ({ setActivePage }) => {
+  const features = [
+    { title: 'Dynamic QRIS', desc: 'Scan QRIS otomatis terisi nominal pas.' },
+    { title: 'Split by Item', desc: 'Bagi tagihan akurat sampai pajak & servis.' },
+    { title: 'Hutang/Piutang', desc: 'Catat siapa yang ditalangin, gak bakal lupa!' },
+    { title: 'Share to WA', desc: 'Kirim rincian rapi langsung ke grup.' },
+    { title: 'Database Resto', desc: 'Simpan menu favorit, input makin cepat.' },
+    { title: 'Multi-Payment', desc: 'Simpan semua rekening & e-wallet kamu.' },
+    { title: 'Draft & Riwayat', desc: 'Simpan progres atau lihat riwayat makan.' },
+    { title: 'Tampilan Premium', desc: 'Desain modern dengan Dark Mode.' },
+  ]
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      style={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        position: 'relative',
+        padding: '1rem'
+      }}
+    >
+      {/* Back Button - Vertically matched with Dark Mode Toggle */}
+      <button
+        onClick={() => setActivePage('work')}
+        style={{
+          position: 'fixed',
+          top: '1.5rem',
+          left: '1.5rem',
+          background: 'none',
+          border: 'none',
+          color: 'var(--text-color)',
+          cursor: 'pointer',
+          fontWeight: 600,
+          fontSize: '0.9rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          zIndex: 101, // Sama dengan theme-toggle
+          padding: '0.5rem'
+        }}
+      >
+        ← Back
+      </button>
+
+      {/* Konten Utama dengan Margin Top yang lega */}
+      <div style={{ marginTop: '4rem', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+        <div className="badge" style={{ background: 'var(--accent-color)', color: 'white' }}>Featured Project</div>
+        <h2 style={{ fontSize: 'clamp(1.5rem, 8vw, 2rem)', marginBottom: '0.5rem', textAlign: 'center' }}>PaySplit QR</h2>
+
+        <div style={{ maxWidth: '500px', marginBottom: '1.5rem', textAlign: 'center', padding: '0 1rem' }}>
+          <p style={{ fontSize: 'clamp(0.9rem, 4vw, 1.1rem)', lineHeight: '1.6', color: 'var(--text-color)', fontWeight: 500 }}>
+            Capek hitung manual tiap abis makan bareng? <span style={{ color: 'var(--accent-color)' }}>Pakai PaySplit QR!</span>
+          </p>
+          <p style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>
+            Patungan jadi adil, cepat, dan gak pake ribet.<br />
+            Cukup: <strong>Hitung, Bagi, Bayar!</strong>
+          </p>
+        </div>
+
+        <div
+          className="custom-scroll"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '0.75rem',
+            width: '100%',
+            overflowY: 'auto',
+            maxHeight: '40vh',
+            padding: '0.5rem',
+            marginBottom: '1rem',
+            textAlign: 'left'
+          }}
+        >
+          {features.map((f, i) => (
+            <div key={i} style={{
+              padding: '1rem',
+              background: 'var(--card-bg)',
+              border: '1px solid var(--border-color)',
+              borderRadius: '0.75rem'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                <span style={{ color: '#22c55e' }}>✅</span>
+                <strong style={{ fontSize: '0.85rem' }}>{f.title}</strong>
+              </div>
+              <p style={{ fontSize: '0.75rem', margin: 0, color: 'var(--text-muted)' }}>{f.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <p style={{ fontSize: '0.85rem', marginBottom: '1.5rem', fontStyle: 'italic', textAlign: 'center', padding: '0 1rem' }}>
+          📢 Tunggu apa lagi? Jadikan momen kumpul bareng teman lebih seru!
+        </p>
+
+        <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+          <a
+            href="https://github.com/venkyarisko/PaySplit/releases/download/v1.2.4/PaySplit.apk"
+            style={{ textDecoration: 'none' }}
+          >
+            <button
+              style={{
+                padding: '0.8rem 2rem',
+                borderRadius: '9999px',
+                background: 'var(--accent-color)',
+                color: 'white',
+                border: 'none',
+                cursor: 'pointer',
+                fontWeight: 700,
+                fontSize: '1rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                transition: 'all 0.2s',
+                boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+              }}
+            >
+              <Download size={20} /> Download App
+            </button>
+          </a>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+const About = () => {
+  const [lang, setLang] = useState('id')
+  const [activeSubTab, setActiveSubTab] = useState('profile')
+
+  const calculateDuration = (startDate) => {
+    const start = new Date(startDate)
+    const now = new Date()
+    let years = now.getFullYear() - start.getFullYear()
+    let months = now.getMonth() - start.getMonth()
+    if (months < 0 || (months === 0 && now.getDate() < start.getDate())) {
+      years--
+      months += 12
+    }
+    return { years, months }
+  }
+
+  const age = calculateDuration('1999-04-21').years
+  const youtubeExp = calculateDuration('2024-11-22')
+
+  const content = {
+    id: {
+      profile: {
+        title: "Profil",
+        text: `Halo, saya Venky Arisko. Sebagai seorang Streamer YouTube yang kini menginjak usia ${age} tahun, saya mendedikasikan waktu saya untuk mengeksplorasi luasnya dunia digital dengan semangat belajar yang tak pernah padam.`
+      },
+      journey: {
+        title: "Perjalanan",
+        text: `Memulai langkah di YouTube sejak 22 November 2024 (sudah berjalan ${youtubeExp.years > 0 ? youtubeExp.years + ' tahun ' : ''}${youtubeExp.months} bulan), saya telah membangun ekosistem digital yang mencakup platform fan funding, layanan joki game, hingga aplikasi utilitas cerdas seperti PaySplitQR.`
+      },
+      vision: {
+        title: "Visi",
+        text: "Saya bercita-cita untuk menjadi influencer yang menginspirasi di YouTube serta menciptakan lebih banyak aplikasi solutif di masa depan. Dengan kerendahan hati, saya terus berjuang demi keluarga, dan dukungan kalian adalah energi utama bagi saya untuk terus berkembang."
+      }
+    },
+    eng: {
+      profile: {
+        title: "Profile",
+        text: `Hello, I'm Venky Arisko. As a YouTube streamer now ${age} years old, I am deeply committed to exploring the digital landscape with an ever-growing passion for learning and technology.`
+      },
+      journey: {
+        title: "Journey",
+        text: `Since starting my YouTube journey on November 22, 2024 (marking ${youtubeExp.years > 0 ? youtubeExp.years + ' years ' : ''}${youtubeExp.months} months), I have successfully launched a fan funding platform, professional gaming services, and utility apps like PaySplitQR.`
+      },
+      vision: {
+        title: "Vision",
+        text: "I aspire to become an influential creator on YouTube and develop more meaningful applications in the future. Driven by the goal of supporting my family, I remain humble and grateful for your support."
+      }
+    }
+  }
+
+  const t = content[lang]
+  const tabs = ['profile', 'journey', 'vision']
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      style={{ 
+        maxWidth: '700px', 
+        width: '100%',
+        height: '500px', // Mengunci tinggi total agar posisi tidak bergeser
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center', 
+        justifyContent: 'flex-start', // Mulai dari atas
+        padding: '0 1rem' 
+      }}
+    >
+      {/* Lang Switcher */}
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}>
+        {['id', 'eng'].map(l => (
+          <button key={l} onClick={() => setLang(l)} style={{
+            padding: '0.25rem 0.75rem', borderRadius: '6px', border: '1px solid var(--border-color)',
+            background: lang === l ? 'var(--text-color)' : 'transparent',
+            color: lang === l ? 'var(--bg-color)' : 'var(--text-color)',
+            fontSize: '0.7rem', cursor: 'pointer', fontWeight: 700, textTransform: 'uppercase'
+          }}>{l}</button>
+        ))}
+      </div>
+
+      <h2 style={{ marginBottom: '2rem', fontSize: '1.8rem' }}>{lang === 'id' ? 'Tentang Saya' : 'About Me'}</h2>
+
+      {/* Sub-Tabs Navigation */}
+      <div style={{
+        display: 'flex',
+        background: 'var(--card-bg)',
+        padding: '0.4rem',
+        borderRadius: '12px',
+        border: '1px solid var(--border-color)',
+        marginBottom: '2rem',
+        gap: '0.25rem'
+      }}>
+        {tabs.map(tab => (
+          <button
+            key={tab}
+            onClick={() => setActiveSubTab(tab)}
+            style={{
+              padding: '0.6rem 1.2rem',
+              borderRadius: '8px',
+              border: 'none',
+              background: activeSubTab === tab ? 'var(--accent-color)' : 'transparent',
+              color: activeSubTab === tab ? 'white' : 'var(--text-color)',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '0.85rem',
+              transition: 'all 0.2s'
+            }}
+          >
+            {t[tab].title}
+          </button>
+        ))}
+      </div>
+
+      {/* Content Display - Fixed Height to prevent jumping */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeSubTab + lang}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          style={{ 
+            textAlign: 'center', 
+            minHeight: '180px', // Menjaga posisi tab tetap stabil
+            display: 'flex', 
+            alignItems: 'flex-start', // Mulai dari atas agar konsisten
+            justifyContent: 'center',
+            padding: '0 1rem',
+            width: '100%'
+          }}
+        >
+          <p style={{ lineHeight: '1.8', fontSize: '1.1rem', fontWeight: 500, margin: 0 }}>
+            {t[activeSubTab].text}
+          </p>
+        </motion.div>
+      </AnimatePresence>
+
+      <div style={{
+        marginTop: '3rem',
+        fontSize: '0.8rem',
+        fontStyle: 'italic',
+        color: 'var(--text-muted)',
+        opacity: 0.8
+      }}>
+        {lang === 'id' ? 'Terima kasih atas dukungannya! 🙏' : 'Thank you for your support! 🙏'}
+      </div>
+    </motion.div>
+  )
+}
+
+
+// --- Main App ---
+
+function App() {
+  const [activePage, setActivePage] = useState('home')
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('venky-theme') || 'light'
+  })
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+    localStorage.setItem('venky-theme', theme)
+  }, [theme])
+
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light')
+  }
+
+  return (
+    <div className="app-container">
+      <button className="theme-toggle" onClick={toggleTheme}>
+        {theme === 'light' ? <Moon size={24} /> : <Sun size={24} />}
+      </button>
+
+      <main className="content-area">
+        <AnimatePresence mode="wait">
+          {activePage === 'home' && <Home key="home" />}
+          {activePage === 'work' && <Work key="work" setActivePage={setActivePage} />}
+          {activePage === 'paysplit' && <PaySplit key="paysplit" setActivePage={setActivePage} />}
+          {activePage === 'about' && <About key="about" />}
+        </AnimatePresence>
+      </main>
+
+      <Navbar activePage={activePage} setActivePage={setActivePage} />
+    </div>
+  )
+}
+
+
+export default App
