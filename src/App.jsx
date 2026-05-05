@@ -411,12 +411,53 @@ function App() {
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('venky-theme') || 'light'
   })
+
+  // --- Music Shuffle Logic ---
+  const songs = [
+    { title: 'Lo-Fi : I Need a Girl', src: '/vevego/song/1.mp3' },
+    { title: 'Lo-Fi : Ao no Sumika', src: '/vevego/song/2.mp3' },
+    { title: 'Lo-Fi : More Than Words', src: '/vevego/song/3.mp3' },
+    { title: 'Lo-Fi : Roaring Tides', src: '/vevego/song/4.mp3' },
+    { title: 'Lo-Fi : Aoi Shiori', src: '/vevego/song/5.mp3' }
+  ]
+
+  const [playlist, setPlaylist] = useState([])
+  const [currentIndex, setCurrentIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(() => {
     const saved = localStorage.getItem('venky-music')
     return saved === null ? true : saved === 'true'
   })
   const [volume, setVolume] = useState(0.2)
   const audioRef = useRef(null)
+
+  // Function to shuffle array
+  const shuffle = (array) => {
+    let currentIndex = array.length, randomIndex;
+    const newArray = [...array];
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [newArray[currentIndex], newArray[randomIndex]] = [newArray[randomIndex], newArray[currentIndex]];
+    }
+    return newArray;
+  }
+
+  // Initialize playlist on mount
+  useEffect(() => {
+    const indices = songs.map((_, i) => i)
+    setPlaylist(shuffle(indices))
+  }, [])
+
+  const handleSongEnd = () => {
+    if (currentIndex + 1 >= playlist.length) {
+      // Re-shuffle when all songs played
+      const indices = songs.map((_, i) => i)
+      setPlaylist(shuffle(indices))
+      setCurrentIndex(0)
+    } else {
+      setCurrentIndex(prev => prev + 1)
+    }
+  }
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -429,7 +470,6 @@ function App() {
       audioRef.current.volume = volume
       if (isPlaying) {
         audioRef.current.play().catch(() => {
-          // Jika diblokir browser, tunggu klik pertama dari user
           const startAudio = () => {
             audioRef.current.play()
             window.removeEventListener('click', startAudio)
@@ -440,7 +480,7 @@ function App() {
         audioRef.current.pause()
       }
     }
-  }, [volume, isPlaying])
+  }, [volume, isPlaying, currentIndex, playlist])
 
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light')
@@ -450,13 +490,15 @@ function App() {
     setIsPlaying(!isPlaying)
   }
 
+  const currentSong = playlist.length > 0 ? songs[playlist[currentIndex]] : songs[0]
+
   return (
     <div className="app-container">
-      {/* Hidden Audio Element - Chill LoFi */}
+      {/* Hidden Audio Element - Chill LoFi Shuffle */}
       <audio
         ref={audioRef}
-        src="/vevego/song/1.mp3"
-        loop
+        src={currentSong.src}
+        onEnded={handleSongEnd}
         autoPlay
       />
 
@@ -473,18 +515,23 @@ function App() {
           boxShadow: '0 2px 12px rgba(0,0,0,0.08)'
         }}>
           {/* Song Title */}
-          <div style={{
-            fontSize: '0.7rem',
-            fontWeight: 700,
-            color: 'var(--accent-color)',
-            letterSpacing: '0.5px',
-            whiteSpace: 'nowrap',
-            borderRight: '1px solid var(--border-color)',
-            paddingRight: '0.75rem',
-            marginRight: '0.25rem'
-          }}>
-            Lo-Fi : I Need a Girl
-          </div>
+          <motion.div
+            key={currentSong.title}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            style={{
+              fontSize: '0.7rem',
+              fontWeight: 700,
+              color: 'var(--accent-color)',
+              letterSpacing: '0.5px',
+              whiteSpace: 'nowrap',
+              borderRight: '1px solid var(--border-color)',
+              paddingRight: '0.75rem',
+              marginRight: '0.25rem'
+            }}
+          >
+            {currentSong.title}
+          </motion.div>
 
           <button
             onClick={toggleMusic}
