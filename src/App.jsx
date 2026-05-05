@@ -136,6 +136,25 @@ const PaySplit = ({ setActivePage }) => {
     { title: 'Tampilan Premium', desc: 'Desain modern dengan Dark Mode.' },
   ]
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" }
+    }
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -143,14 +162,17 @@ const PaySplit = ({ setActivePage }) => {
       exit={{ opacity: 0 }}
       style={{
         width: '100%',
+        height: '100%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        justifyContent: 'center', // Pusatkan secara vertikal
         position: 'relative',
-        padding: '1rem'
+        padding: '0 1rem',
+        overflow: 'hidden' // Benar-benar tidak ada scroll
       }}
     >
-      {/* Back Button - Vertically matched with Dark Mode Toggle */}
+      {/* Back Button */}
       <button
         onClick={() => setActivePage('work')}
         style={{
@@ -162,74 +184,106 @@ const PaySplit = ({ setActivePage }) => {
           color: 'var(--text-color)',
           cursor: 'pointer',
           fontWeight: 600,
-          fontSize: '0.9rem',
+          fontSize: '0.8rem',
           display: 'flex',
           alignItems: 'center',
-          gap: '0.5rem',
-          zIndex: 101, // Sama dengan theme-toggle
+          gap: '0.4rem',
+          zIndex: 110,
           padding: '0.5rem'
         }}
       >
         ← Back
       </button>
 
-      {/* Konten Utama dengan Margin Top yang lega */}
-      <div style={{ marginTop: '4rem', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-        <div className="badge" style={{ background: 'var(--accent-color)', color: 'white' }}>Featured Project</div>
-        <h2 style={{ fontSize: 'clamp(1.5rem, 8vw, 2rem)', marginBottom: '0.5rem', textAlign: 'center' }}>PaySplit QR</h2>
+      {/* Konten Utama - Dibuat sangat rapat agar fit satu layar */}
+      <div style={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center', 
+        width: '100%',
+        maxWidth: '500px',
+        gap: '0.85rem' // Sedikit lebih longgar tapi tetap rapat
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="badge" 
+            style={{ 
+              background: 'var(--accent-color)', 
+              color: 'white', 
+              marginBottom: '0.5rem',
+              fontSize: '0.75rem',
+              padding: '0.25rem 0.75rem'
+            }}
+          >
+            Featured Project
+          </motion.div>
+          
+          <motion.h2 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{ fontSize: '1.8rem', marginBottom: '0.25rem' }}
+          >
+            PaySplit QR
+          </motion.h2>
 
-        <div style={{ maxWidth: '500px', marginBottom: '1.5rem', textAlign: 'center', padding: '0 1rem' }}>
-          <p style={{ fontSize: 'clamp(0.9rem, 4vw, 1.1rem)', lineHeight: '1.6', color: 'var(--text-color)', fontWeight: 500 }}>
-            Capek hitung manual tiap abis makan bareng? <span style={{ color: 'var(--accent-color)' }}>Pakai PaySplit QR!</span>
-          </p>
-          <p style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>
-            Patungan jadi adil, cepat, dan gak pake ribet.<br />
-            Cukup: <strong>Hitung, Bagi, Bayar!</strong>
+          <p style={{ fontSize: '0.9rem', color: 'var(--text-color)', fontWeight: 500, margin: 0 }}>
+            Capek hitung manual? <span style={{ color: 'var(--accent-color)' }}>Pakai PaySplit QR!</span>
           </p>
         </div>
 
-        <div
-          className="custom-scroll"
+        {/* Grid Fitur - 2 kolom */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '0.75rem',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '0.6rem',
             width: '100%',
-            overflowY: 'auto',
-            maxHeight: '40vh',
-            padding: '0.5rem',
-            marginBottom: '1rem',
-            textAlign: 'left'
+            padding: '0.25rem'
           }}
         >
           {features.map((f, i) => (
-            <div key={i} style={{
-              padding: '1rem',
-              background: 'var(--card-bg)',
-              border: '1px solid var(--border-color)',
-              borderRadius: '0.75rem'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-                <span style={{ color: '#22c55e' }}>✅</span>
-                <strong style={{ fontSize: '0.85rem' }}>{f.title}</strong>
+            <motion.div 
+              key={i} 
+              variants={itemVariants}
+              whileHover={{ scale: 1.03 }}
+              style={{
+                padding: '0.75rem',
+                background: 'var(--card-bg)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '0.75rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.15rem'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <span style={{ fontSize: '0.8rem' }}>✅</span>
+                <strong style={{ fontSize: '0.85rem', whiteSpace: 'nowrap' }}>{f.title}</strong>
               </div>
-              <p style={{ fontSize: '0.75rem', margin: 0, color: 'var(--text-muted)' }}>{f.desc}</p>
-            </div>
+              <p style={{ fontSize: '0.75rem', margin: 0, color: 'var(--text-muted)', lineHeight: '1.3' }}>{f.desc}</p>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        <p style={{ fontSize: '0.85rem', marginBottom: '1.5rem', fontStyle: 'italic', textAlign: 'center', padding: '0 1rem' }}>
-          📢 Tunggu apa lagi? Jadikan momen kumpul bareng teman lebih seru!
-        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+          <p style={{ fontSize: '0.85rem', fontStyle: 'italic', margin: 0, opacity: 0.8 }}>
+            Hitung, Bagi, Bayar! 🚀
+          </p>
 
-        <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
           <a
             href="https://github.com/venkyarisko/PaySplit/releases/download/v1.2.4/PaySplit.apk"
             style={{ textDecoration: 'none' }}
           >
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               style={{
-                padding: '0.8rem 2rem',
+                padding: '0.7rem 1.8rem',
                 borderRadius: '9999px',
                 background: 'var(--accent-color)',
                 color: 'white',
@@ -240,12 +294,11 @@ const PaySplit = ({ setActivePage }) => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                transition: 'all 0.2s',
                 boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
               }}
             >
-              <Download size={20} /> Download App
-            </button>
+              <Download size={18} /> Download
+            </motion.button>
           </a>
         </div>
       </div>
