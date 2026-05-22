@@ -1341,10 +1341,7 @@ function App() {
 
   const [playlist, setPlaylist] = useState([])
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [isPlaying, setIsPlaying] = useState(() => {
-    const saved = localStorage.getItem('venky-music')
-    return saved === null ? true : saved === 'true'
-  })
+  const [isPlaying, setIsPlaying] = useState(true)
   const [volume, setVolume] = useState(0.2)
   const audioRef = useRef(null)
 
