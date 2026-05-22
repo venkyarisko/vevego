@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sun, Moon, ExternalLink, User, Briefcase, Home as HomeIcon, Video, Globe, Download, Volume2, VolumeX } from 'lucide-react'
-import { FaGithub, FaInstagram, FaYoutube, FaTiktok, FaDiscord } from 'react-icons/fa'
+import { Sun, Moon, ExternalLink, User, Briefcase, Home as HomeIcon, Video, Globe, Download, Volume2, VolumeX, Play, Pause, Bell } from 'lucide-react'
+import { FaGithub, FaInstagram, FaYoutube, FaTiktok, FaDiscord, FaSteam } from 'react-icons/fa'
 
 // --- Components ---
 
@@ -44,7 +44,7 @@ const Home = () => (
       <a href="https://www.instagram.com/venkyarisko/" target="_blank" rel="noopener noreferrer" className="social-icon" title="Instagram"><FaInstagram size={20} /></a>
       <a href="https://www.tiktok.com/@truevevego" target="_blank" rel="noopener noreferrer" className="social-icon" title="TikTok"><FaTiktok size={20} /></a>
       <a href="https://www.youtube.com/@vevego" target="_blank" rel="noopener noreferrer" className="social-icon" title="YouTube"><FaYoutube size={20} /></a>
-      <a href="https://discord.com/users/vevego" target="_blank" rel="noopener noreferrer" className="social-icon" title="Discord: vevego"><FaDiscord size={20} /></a>
+      <a href="https://discord.gg/kdX5XyS3aB" target="_blank" rel="noopener noreferrer" className="social-icon" title="Discord Server"><FaDiscord size={20} /></a>
     </div>
   </motion.div>
 )
@@ -54,22 +54,36 @@ const Work = ({ setActivePage, theme }) => {
     {
       title: 'YouTube Profile',
       desc: 'Fan funding for support and interactive overlays.',
-      link: 'https://venky-arisko.vercel.app/',
+      link: 'ytprofile',
       icon: <FaYoutube size={24} />,
-      isExternal: true
+      isExternal: false
     },
     {
-      title: 'Joki/Veve Service',
+      title: 'Joki / Veve Service',
       desc: 'Professional gaming services and account boosting.',
-      link: 'https://venkyarisko.github.io/joki-veve/',
+      link: 'joki',
       icon: <Briefcase />,
-      isExternal: true
+      isExternal: false
     },
     {
       title: 'PaySplitQR',
       desc: 'Android App (APK) for smart bill splitting.',
       link: 'paysplit',
       icon: <ExternalLink />,
+      isExternal: false
+    },
+    {
+      title: 'VevePass',
+      desc: 'Sewa akses akun Steam premium dengan library game keluarga lengkap.',
+      link: 'vevepass',
+      icon: <FaSteam size={24} />,
+      isExternal: false
+    },
+    {
+      title: 'SubGuard',
+      desc: 'Aplikasi pelacak dan pengingat tagihan langganan (subscription manager).',
+      link: 'subguard',
+      icon: <Bell size={24} />,
       isExternal: false
     }
   ]
@@ -148,8 +162,8 @@ const PaySplit = ({ setActivePage }) => {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: { duration: 0.5, ease: "easeOut" }
     }
@@ -196,32 +210,32 @@ const PaySplit = ({ setActivePage }) => {
       </button>
 
       {/* Konten Utama - Responsive scale untuk Desktop vs Mobile */}
-      <div style={{ 
-        display: 'flex', 
-        flexDirection: 'column', 
-        alignItems: 'center', 
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         width: '100%',
         maxWidth: '800px', // Lebih lebar di desktop
         gap: 'clamp(0.75rem, 2vh, 1.5rem)',
         padding: '1rem'
       }}>
         <div style={{ textAlign: 'center' }}>
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="badge" 
-            style={{ 
-              background: 'var(--accent-color)', 
-              color: 'white', 
+            className="badge"
+            style={{
+              background: 'var(--accent-color)',
+              color: 'white',
               marginBottom: '0.5rem',
               fontSize: 'clamp(0.7rem, 1.5vw, 0.9rem)',
               padding: '0.25rem 0.75rem'
             }}
           >
-            Featured Project
+            Utility App
           </motion.div>
-          
-          <motion.h2 
+
+          <motion.h2
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             style={{ fontSize: 'clamp(1.5rem, 5vw, 2.8rem)', marginBottom: '0.25rem' }}
@@ -248,8 +262,8 @@ const PaySplit = ({ setActivePage }) => {
           }}
         >
           {features.map((f, i) => (
-            <motion.div 
-              key={i} 
+            <motion.div
+              key={i}
               variants={itemVariants}
               whileHover={{ scale: 1.03 }}
               style={{
@@ -301,6 +315,742 @@ const PaySplit = ({ setActivePage }) => {
               <Download size={20} /> Download
             </motion.button>
           </a>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+const VevePass = ({ setActivePage }) => {
+  const features = [
+    { title: 'Library besar', desc: 'Akses koleksi game dari family group yang terus di-update.' },
+    { title: 'Sharing resmi', desc: 'Menggunakan fitur Steam Family resmi, bukan crack atau sharing ilegal.' },
+    { title: 'Aman & transparan', desc: 'Panduan jelas, dukungan admin, dan login via QR.' },
+    { title: 'Aktivasi cepat', desc: 'Setelah bayar dikonfirmasi, akun akan di berikan oleh Admin.' },
+  ]
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" }
+    }
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        padding: '0 1rem',
+        overflowY: 'auto',
+        maxHeight: '100%'
+      }}
+    >
+      {/* Back Button */}
+      <button
+        onClick={() => setActivePage('work')}
+        style={{
+          position: 'fixed',
+          top: '1.5rem',
+          left: '1.5rem',
+          background: 'none',
+          border: 'none',
+          color: 'var(--text-color)',
+          cursor: 'pointer',
+          fontWeight: 600,
+          fontSize: '0.8rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.4rem',
+          zIndex: 110,
+          padding: '0.5rem'
+        }}
+      >
+        ← Back
+      </button>
+
+      {/* Konten Utama */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '100%',
+        maxWidth: '800px',
+        gap: 'clamp(0.75rem, 2vh, 1.5rem)',
+        padding: '3rem 1rem 5rem 1rem'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="badge"
+            style={{
+              background: 'var(--accent-color)',
+              color: 'white',
+              marginBottom: '0.5rem',
+              fontSize: 'clamp(0.7rem, 1.5vw, 0.9rem)',
+              padding: '0.25rem 0.75rem'
+            }}
+          >
+            Sewa Akun Steam Premium
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{ fontSize: 'clamp(1.5rem, 5vw, 2.8rem)', marginBottom: '0.25rem' }}
+          >
+            VevePass
+          </motion.h2>
+
+          <p style={{ fontSize: 'clamp(0.9rem, 2vw, 1.2rem)', color: 'var(--text-color)', fontWeight: 700, margin: '0.25rem 0' }}>
+            MAIN GAME, HEMAT BIAYA
+          </p>
+
+          <p style={{ fontSize: 'clamp(0.8rem, 1.8vw, 0.95rem)', color: 'var(--text-muted)', maxWidth: '600px', margin: '0.5rem auto 0 auto', lineHeight: '1.5' }}>
+            Sewa akses akun Steam premium dengan library game keluarga yang lengkap dan melimpah. Pilihan paling praktis dan hemat untuk menikmati ratusan game original terpopuler tanpa harus membelinya satu per satu.
+          </p>
+        </div>
+
+        {/* Grid Fitur */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: 'clamp(0.5rem, 1.5vw, 1rem)',
+            width: '100%',
+            padding: '0.25rem'
+          }}
+        >
+          {features.map((f, i) => (
+            <motion.div
+              key={i}
+              variants={itemVariants}
+              whileHover={{ scale: 1.03 }}
+              style={{
+                padding: 'clamp(0.6rem, 2vw, 1.2rem)',
+                background: 'var(--card-bg)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '0.75rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.15rem'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <span style={{ fontSize: 'clamp(0.75rem, 1.5vw, 1rem)' }}>🔥</span>
+                <strong style={{ fontSize: 'clamp(0.8rem, 1.8vw, 1.1rem)', whiteSpace: 'nowrap' }}>{f.title}</strong>
+              </div>
+              <p style={{ fontSize: 'clamp(0.7rem, 1.5vw, 0.9rem)', margin: 0, color: 'var(--text-muted)', lineHeight: '1.4' }}>{f.desc}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(0.75rem, 2vh, 1.2rem)', marginTop: '0.5rem' }}>
+          <p style={{ fontSize: 'clamp(0.8rem, 1.5vw, 1rem)', fontStyle: 'italic', margin: 0, opacity: 0.8 }}>
+            Siap bermain game favoritmu dengan hemat? 🎮
+          </p>
+
+          <a
+            href="https://vevepass.tempatsewa.workers.dev/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'none' }}
+          >
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              style={{
+                padding: 'clamp(0.6rem, 1.5vw, 0.8rem) clamp(1.5rem, 3vw, 2.5rem)',
+                borderRadius: '9999px',
+                background: 'var(--accent-color)',
+                color: 'white',
+                border: 'none',
+                cursor: 'pointer',
+                fontWeight: 700,
+                fontSize: 'clamp(0.9rem, 1.8vw, 1.2rem)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+              }}
+            >
+              <FaSteam size={20} /> Sewa Sekarang
+            </motion.button>
+          </a>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+const YoutubeProfile = ({ setActivePage }) => {
+  const features = [
+    { title: 'Fan Funding', desc: 'Dukungan donasi langsung interaktif dari penonton saat live stream.' },
+    { title: 'Overlay Widget', desc: 'Widget animasi overlay real-time untuk mempercantik siaran.' },
+    { title: 'Sosial Media Terpusat', desc: 'Integrasi link sosial media creator yang rapi dan mudah diakses.' },
+    { title: 'Desain Responsif', desc: 'Tampilan visual estetik yang disesuaikan untuk personal branding.' },
+  ]
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" }
+    }
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        padding: '0 1rem',
+        overflowY: 'auto',
+        maxHeight: '100%'
+      }}
+    >
+      {/* Back Button */}
+      <button
+        onClick={() => setActivePage('work')}
+        style={{
+          position: 'fixed',
+          top: '1.5rem',
+          left: '1.5rem',
+          background: 'none',
+          border: 'none',
+          color: 'var(--text-color)',
+          cursor: 'pointer',
+          fontWeight: 600,
+          fontSize: '0.8rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.4rem',
+          zIndex: 110,
+          padding: '0.5rem'
+        }}
+      >
+        ← Back
+      </button>
+
+      {/* Konten Utama */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '100%',
+        maxWidth: '800px',
+        gap: 'clamp(0.75rem, 2vh, 1.5rem)',
+        padding: '3rem 1rem 5rem 1rem'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="badge"
+            style={{
+              background: '#ef4444',
+              color: 'white',
+              marginBottom: '0.5rem',
+              fontSize: 'clamp(0.7rem, 1.5vw, 0.9rem)',
+              padding: '0.25rem 0.75rem'
+            }}
+          >
+            Creator Platform
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{ fontSize: 'clamp(1.5rem, 5vw, 2.8rem)', marginBottom: '0.25rem' }}
+          >
+            YouTube Profile
+          </motion.h2>
+
+          <p style={{ fontSize: 'clamp(0.9rem, 2vw, 1.2rem)', color: 'var(--text-color)', fontWeight: 700, margin: '0.25rem 0' }}>
+            KREATIVITAS & DUKUNGAN TANPA BATAS
+          </p>
+
+          <p style={{ fontSize: 'clamp(0.8rem, 1.8vw, 0.95rem)', color: 'var(--text-muted)', maxWidth: '600px', margin: '0.5rem auto 0 auto', lineHeight: '1.5' }}>
+            Halaman interaktif YouTube Profile yang menyediakan sarana dukungan (fan funding), interaksi langsung, serta widget overlay kustom untuk live streaming creator.
+          </p>
+        </div>
+
+        {/* Grid Fitur */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: 'clamp(0.5rem, 1.5vw, 1rem)',
+            width: '100%',
+            padding: '0.25rem'
+          }}
+        >
+          {features.map((f, i) => (
+            <motion.div
+              key={i}
+              variants={itemVariants}
+              whileHover={{ scale: 1.03 }}
+              style={{
+                padding: 'clamp(0.6rem, 2vw, 1.2rem)',
+                background: 'var(--card-bg)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '0.75rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.15rem'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <span style={{ fontSize: 'clamp(0.75rem, 1.5vw, 1rem)' }}>✨</span>
+                <strong style={{ fontSize: 'clamp(0.8rem, 1.8vw, 1.1rem)', whiteSpace: 'nowrap' }}>{f.title}</strong>
+              </div>
+              <p style={{ fontSize: 'clamp(0.7rem, 1.5vw, 0.9rem)', margin: 0, color: 'var(--text-muted)', lineHeight: '1.4' }}>{f.desc}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(0.75rem, 2vh, 1.2rem)', marginTop: '0.5rem' }}>
+          <p style={{ fontSize: 'clamp(0.8rem, 1.5vw, 1rem)', fontStyle: 'italic', margin: 0, opacity: 0.8 }}>
+            Ingin melihat profil lengkapnya? 🌐
+          </p>
+
+          <a
+            href="https://venky-arisko.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'none' }}
+          >
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              style={{
+                padding: 'clamp(0.6rem, 1.5vw, 0.8rem) clamp(1.5rem, 3vw, 2.5rem)',
+                borderRadius: '9999px',
+                background: '#ef4444',
+                color: 'white',
+                border: 'none',
+                cursor: 'pointer',
+                fontWeight: 700,
+                fontSize: 'clamp(0.9rem, 1.8vw, 1.2rem)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                boxShadow: '0 4px 12px rgba(239, 68, 68, 0.3)'
+              }}
+            >
+              <FaYoutube size={20} /> Kunjungi Profile
+            </motion.button>
+          </a>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+const JokiService = ({ setActivePage }) => {
+  const features = [
+    { title: 'Booster Profesional', desc: 'Dikerjakan oleh pemain berpengalaman dengan rank tinggi untuk hasil maksimal.' },
+    { title: 'Aman & Terpercaya', desc: 'Jaminan keamanan akun, privasi data pelanggan, dan pengerjaan bersih tanpa cheat.' },
+    { title: 'Harga Terjangkau', desc: 'Tarif bersahabat dan sangat kompetitif dengan beragam pilihan paket boosting.' },
+    { title: 'Dukungan 15/7', desc: 'Layanan pelanggan sigap yang siap membantu memantau perkembangan akun Anda.' },
+  ]
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" }
+    }
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        padding: '0 1rem',
+        overflowY: 'auto',
+        maxHeight: '100%'
+      }}
+    >
+      {/* Back Button */}
+      <button
+        onClick={() => setActivePage('work')}
+        style={{
+          position: 'fixed',
+          top: '1.5rem',
+          left: '1.5rem',
+          background: 'none',
+          border: 'none',
+          color: 'var(--text-color)',
+          cursor: 'pointer',
+          fontWeight: 600,
+          fontSize: '0.8rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.4rem',
+          zIndex: 110,
+          padding: '0.5rem'
+        }}
+      >
+        ← Back
+      </button>
+
+      {/* Konten Utama */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '100%',
+        maxWidth: '800px',
+        gap: 'clamp(0.75rem, 2vh, 1.5rem)',
+        padding: '3rem 1rem 5rem 1rem'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="badge"
+            style={{
+              background: 'var(--accent-color)',
+              color: 'white',
+              marginBottom: '0.5rem',
+              fontSize: 'clamp(0.7rem, 1.5vw, 0.9rem)',
+              padding: '0.25rem 0.75rem'
+            }}
+          >
+            Gaming Service
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{ fontSize: 'clamp(1.5rem, 5vw, 2.8rem)', marginBottom: '0.25rem' }}
+          >
+            Joki / Veve Service
+          </motion.h2>
+
+          <p style={{ fontSize: 'clamp(0.9rem, 2vw, 1.2rem)', color: 'var(--text-color)', fontWeight: 700, margin: '0.25rem 0' }}>
+            CEPAT, AMAN, DAN TERPERCAYA
+          </p>
+
+          <p style={{ fontSize: 'clamp(0.8rem, 1.8vw, 0.95rem)', color: 'var(--text-muted)', maxWidth: '600px', margin: '0.5rem auto 0 auto', lineHeight: '1.5' }}>
+            Layanan joki game profesional dan boosting akun terpercaya dengan proses pengerjaan cepat, aman, dan harga bersahabat untuk berbagai judul game populer.
+          </p>
+        </div>
+
+        {/* Grid Fitur */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: 'clamp(0.5rem, 1.5vw, 1rem)',
+            width: '100%',
+            padding: '0.25rem'
+          }}
+        >
+          {features.map((f, i) => (
+            <motion.div
+              key={i}
+              variants={itemVariants}
+              whileHover={{ scale: 1.03 }}
+              style={{
+                padding: 'clamp(0.6rem, 2vw, 1.2rem)',
+                background: 'var(--card-bg)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '0.75rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.15rem'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <span style={{ fontSize: 'clamp(0.75rem, 1.5vw, 1rem)' }}>⚡</span>
+                <strong style={{ fontSize: 'clamp(0.8rem, 1.8vw, 1.1rem)', whiteSpace: 'nowrap' }}>{f.title}</strong>
+              </div>
+              <p style={{ fontSize: 'clamp(0.7rem, 1.5vw, 0.9rem)', margin: 0, color: 'var(--text-muted)', lineHeight: '1.4' }}>{f.desc}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(0.75rem, 2vh, 1.2rem)', marginTop: '0.5rem' }}>
+          <p style={{ fontSize: 'clamp(0.8rem, 1.5vw, 1rem)', fontStyle: 'italic', margin: 0, opacity: 0.8 }}>
+            Tingkatkan rank akun game Anda sekarang! 🎮
+          </p>
+
+          <a
+            href="https://venkyarisko.github.io/joki-veve/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'none' }}
+          >
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              style={{
+                padding: 'clamp(0.6rem, 1.5vw, 0.8rem) clamp(1.5rem, 3vw, 2.5rem)',
+                borderRadius: '9999px',
+                background: 'var(--accent-color)',
+                color: 'white',
+                border: 'none',
+                cursor: 'pointer',
+                fontWeight: 700,
+                fontSize: 'clamp(0.9rem, 1.8vw, 1.2rem)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+              }}
+            >
+              <Briefcase size={20} /> Kunjungi Layanan
+            </motion.button>
+          </a>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+const SubGuard = ({ setActivePage }) => {
+  const features = [
+    { title: 'Pengingat Otomatis', desc: 'Notifikasi H-3 sebelum tagihan diperpanjang otomatis agar tidak kecolongan.' },
+    { title: 'Analisis Pengeluaran', desc: 'Grafik dan laporan bulanan & tahunan pengeluaran langganan secara rinci.' },
+    { title: 'Konversi Mata Uang', desc: 'Mendukung multi-mata uang untuk layanan global (USD, EUR, SGD, dll).' },
+    { title: 'Pengelompokan Rapi', desc: 'Klasifikasi langganan berdasarkan Hiburan, Kerja, Utilitas, atau Kustom.' },
+  ]
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" }
+    }
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        padding: '0 1rem',
+        overflowY: 'auto',
+        maxHeight: '100%'
+      }}
+    >
+      {/* Back Button */}
+      <button
+        onClick={() => setActivePage('work')}
+        style={{
+          position: 'fixed',
+          top: '1.5rem',
+          left: '1.5rem',
+          background: 'none',
+          border: 'none',
+          color: 'var(--text-color)',
+          cursor: 'pointer',
+          fontWeight: 600,
+          fontSize: '0.8rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.4rem',
+          zIndex: 110,
+          padding: '0.5rem'
+        }}
+      >
+        ← Back
+      </button>
+
+      {/* Konten Utama */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '100%',
+        maxWidth: '800px',
+        gap: 'clamp(0.75rem, 2vh, 1.5rem)',
+        padding: '3rem 1rem 5rem 1rem'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="badge"
+            style={{
+              background: 'var(--accent-color)',
+              color: 'white',
+              marginBottom: '0.5rem',
+              fontSize: 'clamp(0.7rem, 1.5vw, 0.9rem)',
+              padding: '0.25rem 0.75rem'
+            }}
+          >
+            Utility App
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{ fontSize: 'clamp(1.5rem, 5vw, 2.8rem)', marginBottom: '0.25rem' }}
+          >
+            SubGuard
+          </motion.h2>
+
+          <p style={{ fontSize: 'clamp(0.9rem, 2vw, 1.2rem)', color: 'var(--text-color)', fontWeight: 700, margin: '0.25rem 0' }}>
+            Subscription Manager & Notification
+          </p>
+
+          <p style={{ fontSize: 'clamp(0.8rem, 1.8vw, 0.95rem)', color: 'var(--text-muted)', maxWidth: '600px', margin: '0.5rem auto 0 auto', lineHeight: '1.5' }}>
+            Aplikasi pelacak dan pengingat tagihan langganan (subscription manager) otomatis agar Anda tidak lagi kecolongan tagihan bulanan dari berbagai platform hiburan maupun produktivitas.
+          </p>
+        </div>
+
+        {/* Grid Fitur */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: 'clamp(0.5rem, 1.5vw, 1rem)',
+            width: '100%',
+            padding: '0.25rem'
+          }}
+        >
+          {features.map((f, i) => (
+            <motion.div
+              key={i}
+              variants={itemVariants}
+              whileHover={{ scale: 1.03 }}
+              style={{
+                padding: 'clamp(0.6rem, 2vw, 1.2rem)',
+                background: 'var(--card-bg)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '0.75rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.15rem'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <span style={{ fontSize: 'clamp(0.75rem, 1.5vw, 1rem)' }}>🔔</span>
+                <strong style={{ fontSize: 'clamp(0.8rem, 1.8vw, 1.1rem)', whiteSpace: 'nowrap' }}>{f.title}</strong>
+              </div>
+              <p style={{ fontSize: 'clamp(0.7rem, 1.5vw, 0.9rem)', margin: 0, color: 'var(--text-muted)', lineHeight: '1.4' }}>{f.desc}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(0.75rem, 2vh, 1.2rem)', marginTop: '0.5rem' }}>
+          <p style={{ fontSize: 'clamp(0.8rem, 1.5vw, 1rem)', fontStyle: 'italic', margin: 0, opacity: 0.8 }}>
+            Aplikasi masih dalam tahap pengembangan aktif! 🚀
+          </p>
+
+          <button
+            style={{
+              padding: 'clamp(0.6rem, 1.5vw, 0.8rem) clamp(1.5rem, 3vw, 2.5rem)',
+              borderRadius: '9999px',
+              background: 'var(--border-color)',
+              color: 'var(--text-muted)',
+              border: 'none',
+              cursor: 'not-allowed',
+              fontWeight: 700,
+              fontSize: 'clamp(0.9rem, 1.8vw, 1.2rem)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              opacity: 0.8
+            }}
+            disabled
+          >
+            <Bell size={20} /> Segera Hadir (Coming Soon)
+          </button>
         </div>
       </div>
     </motion.div>
@@ -764,8 +1514,9 @@ function App() {
           <button
             onClick={toggleMusic}
             style={{ background: 'none', border: 'none', color: 'var(--text-color)', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}
+            title={isPlaying ? "Pause Music" : "Play Music"}
           >
-            {isPlaying && volume > 0 ? <Volume2 size={18} /> : <VolumeX size={18} />}
+            {isPlaying ? <Pause size={18} /> : <Play size={18} />}
           </button>
 
           <input
@@ -797,7 +1548,11 @@ function App() {
         <AnimatePresence mode="wait">
           {activePage === 'home' && <Home key="home" />}
           {activePage === 'work' && <Work key="work" setActivePage={setActivePage} theme={theme} />}
+          {activePage === 'ytprofile' && <YoutubeProfile key="ytprofile" setActivePage={setActivePage} />}
+          {activePage === 'joki' && <JokiService key="joki" setActivePage={setActivePage} />}
           {activePage === 'paysplit' && <PaySplit key="paysplit" setActivePage={setActivePage} />}
+          {activePage === 'vevepass' && <VevePass key="vevepass" setActivePage={setActivePage} />}
+          {activePage === 'subguard' && <SubGuard key="subguard" setActivePage={setActivePage} />}
           {activePage === 'about' && <About key="about" />}
         </AnimatePresence>
       </main>
