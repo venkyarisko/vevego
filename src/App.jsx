@@ -1341,7 +1341,7 @@ function App() {
 
   const [playlist, setPlaylist] = useState([])
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [isPlaying, setIsPlaying] = useState(true)
+  const [isPlaying, setIsPlaying] = useState(false)
   const [volume, setVolume] = useState(0.2)
   const audioRef = useRef(null)
 
@@ -1380,7 +1380,6 @@ function App() {
   }, [theme])
 
   useEffect(() => {
-    localStorage.setItem('venky-music', isPlaying)
     if (audioRef.current) {
       audioRef.current.volume = volume
       if (isPlaying) {
