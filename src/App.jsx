@@ -325,8 +325,8 @@ const VevePass = ({ setActivePage }) => {
   const features = [
     { title: 'Library besar', desc: 'Akses koleksi game dari family group yang terus di-update.' },
     { title: 'Sharing resmi', desc: 'Menggunakan fitur Steam Family resmi, bukan crack atau sharing ilegal.' },
-    { title: 'Aman & transparan', desc: 'Panduan jelas, dukungan admin, dan login via QR.' },
-    { title: 'Aktivasi cepat', desc: 'Setelah bayar dikonfirmasi, akun akan di berikan oleh Admin.' },
+    { title: 'Aman & transparan', desc: 'Proses otomatis, verifikasi jelas, dan akses instan setelah pembayaran.' },
+    { title: 'Aktivasi cepat', desc: 'Setelah pembayaran dikonfirmasi, akses aktif otomatis untuk instant guard dan claim akun 24/7.' },
   ]
 
   const containerVariants = {
@@ -428,7 +428,7 @@ const VevePass = ({ setActivePage }) => {
           </p>
 
           <p style={{ fontSize: 'clamp(0.8rem, 1.8vw, 0.95rem)', color: 'var(--text-muted)', maxWidth: '600px', margin: '0.5rem auto 0 auto', lineHeight: '1.5' }}>
-            Sewa akses akun Steam premium dengan library game keluarga yang lengkap dan melimpah. Pilihan paling praktis dan hemat untuk menikmati ratusan game original terpopuler tanpa harus membelinya satu per satu.
+            Nikmati ratusan game original populer lewat satu akses Steam Family premium, lengkap dengan akses akun instan dan Steam Guard otomatis tanpa beli game satu per satu. Solusi paling praktis, cepat, dan jauh lebih hemat untuk langsung main hari ini.
           </p>
         </div>
 
@@ -457,12 +457,13 @@ const VevePass = ({ setActivePage }) => {
                 borderRadius: '0.75rem',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '0.15rem'
+                gap: '0.15rem',
+                minHeight: 'clamp(100px, 22vw, 140px)'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                 <span style={{ fontSize: 'clamp(0.75rem, 1.5vw, 1rem)' }}>🔥</span>
-                <strong style={{ fontSize: 'clamp(0.8rem, 1.8vw, 1.1rem)', whiteSpace: 'nowrap' }}>{f.title}</strong>
+                <strong style={{ fontSize: 'clamp(0.8rem, 1.8vw, 1.1rem)' }}>{f.title}</strong>
               </div>
               <p style={{ fontSize: 'clamp(0.7rem, 1.5vw, 0.9rem)', margin: 0, color: 'var(--text-muted)', lineHeight: '1.4' }}>{f.desc}</p>
             </motion.div>
@@ -470,8 +471,8 @@ const VevePass = ({ setActivePage }) => {
         </motion.div>
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(0.75rem, 2vh, 1.2rem)', marginTop: '0.5rem' }}>
-          <p style={{ fontSize: 'clamp(0.8rem, 1.5vw, 1rem)', fontStyle: 'italic', margin: 0, opacity: 0.8 }}>
-            Siap bermain game favoritmu dengan hemat? 🎮
+          <p style={{ fontSize: 'clamp(0.8rem, 1.5vw, 1rem)', fontStyle: 'italic', margin: 0, opacity: 0.8, textAlign: 'center' }}>
+            Langsung main hari ini, lebih hemat dari beli game! 🎮
           </p>
 
           <a
