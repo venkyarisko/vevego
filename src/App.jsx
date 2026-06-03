@@ -323,10 +323,10 @@ const PaySplit = ({ setActivePage }) => {
 
 const VevePass = ({ setActivePage }) => {
   const features = [
-    { title: 'Library besar', desc: 'Akses koleksi game dari family group yang terus di-update.' },
+    { title: 'Library besar', desc: 'Akses 800+ game premium dan game AAA terbaru yang terus diperbarui.' },
     { title: 'Sharing resmi', desc: 'Menggunakan fitur Steam Family resmi, bukan crack atau sharing ilegal.' },
-    { title: 'Aman & transparan', desc: 'Proses otomatis, verifikasi jelas, dan akses instan setelah pembayaran.' },
-    { title: 'Aktivasi cepat', desc: 'Setelah pembayaran dikonfirmasi, akses aktif otomatis untuk instant guard dan claim akun 24/7.' },
+    { title: 'Aman & transparan', desc: 'Akses akun transparan dan bisa digunakan langsung oleh user tanpa perantara.' },
+    { title: 'Aktivasi cepat', desc: 'Setelah pembayaran berhasil, langsung akses akun dan Steam Guard 24/7.' },
   ]
 
   const containerVariants = {
